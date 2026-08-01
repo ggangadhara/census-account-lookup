@@ -279,12 +279,12 @@ if "phone_input" not in st.session_state:
 if "search_triggered" not in st.session_state:
     st.session_state["search_triggered"] = False
 
-# 1. Page Headers (H1 & H2)
+# 1. Page Headers (H1 & Upgraded Grammatical H2)
 st.markdown(
     """
     <div>
         <div class="header-h1">Census 2027 Malavalli Rural</div>
-        <div class="header-h2">Account Details of Enumerators and Supervisors for Remuneration HLO work</div>
+        <div class="header-h2">Bank Account Details of Enumerators and Supervisors for HLO Remuneration</div>
     </div>
     """,
     unsafe_allow_html=True,
