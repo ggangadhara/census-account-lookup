@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered",
 )
 
-# Modern UI CSS Styling with STRICT PURE WHITE BACKGROUND Enforced
+# Modern UI CSS Styling with STRICT PURE WHITE BACKGROUND & RED BUTTONS Enforced
 st.markdown(
     """
     <style>
@@ -22,7 +22,7 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* Enforce Dark Text for Streamlit Widgets/Labels in case Dark Mode is default */
+    /* Enforce Dark Text for Streamlit Widgets/Labels */
     label[data-testid="stWidgetLabel"] p {
         color: #0F172A !important;
         font-weight: 600 !important;
@@ -31,6 +31,15 @@ st.markdown(
         background-color: #FFFFFF !important;
         color: #0F172A !important;
         border: 1px solid #CBD5E1 !important;
+    }
+
+    /* Enforce RED Background and WHITE Text for ALL Buttons (Search & Clear) */
+    div.stButton > button, div.stButton > button:hover, div.stButton > button:focus, div.stButton > button:active {
+        background-color: #DC2626 !important;
+        color: #FFFFFF !important;
+        border: 1px solid #B91C1C !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
     }
 
     /* Main Container */
@@ -45,21 +54,6 @@ st.markdown(
         padding-top: 2rem;
         padding-bottom: 3rem;
         background-color: #FFFFFF !important;
-    }
-
-    /* Top Badge */
-    .hero-badge {
-        display: inline-block;
-        background: #EEF2FF;
-        color: #4F46E5;
-        font-size: 0.78rem;
-        font-weight: 600;
-        padding: 5px 12px;
-        border-radius: 20px;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-        border: 1px solid #E0E7FF;
     }
 
     /* H1 & H2 Header Typography */
@@ -97,57 +91,17 @@ st.markdown(
         left: 0;
         right: 0;
         height: 5px;
-        background: linear-gradient(90deg, #4F46E5, #3B82F6);
+        background: #DC2626;
     }
     
-    /* Result Card Header & Role Badge */
-    .result-header-wrapper {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #F1F5F9;
-        padding-bottom: 16px;
-        margin-bottom: 18px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    .result-header {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #0F172A;
-        margin: 0;
-    }
-    .role-badge {
-        font-size: 0.85rem;
-        font-weight: 600;
-        padding: 6px 14px;
-        border-radius: 20px;
-        text-transform: capitalize;
-    }
-    .role-supervisor {
-        background-color: #EEF2FF;
-        color: #4338CA;
-        border: 1px solid #C7D2FE;
-    }
-    .role-enumerator {
-        background-color: #ECFDF5;
-        color: #047857;
-        border: 1px solid #A7F3D0;
-    }
-    .role-default {
-        background-color: #F1F5F9;
-        color: #475569;
-        border: 1px solid #CBD5E1;
-    }
-
-    /* Rows and Text Layout */
+    /* Rows and Uniform Text Layout */
     .result-row {
         display: flex;
         flex-direction: column;
         margin-bottom: 14px;
         font-size: 1.15rem;
         color: #1E293B;
-        line-height: 1.4;
+        line-height: 1.5;
     }
     .result-label {
         font-size: 0.85rem;
@@ -161,12 +115,14 @@ st.markdown(
         font-weight: 500;
         color: #0F172A;
     }
-    .account-code {
-        font-family: 'Courier New', Courier, monospace;
+
+    /* Highlighting specifically for Account Number, IFSC Code, and Bank Name */
+    .highlight-box {
         font-weight: 700;
-        color: #1E40AF;
-        background: #EFF6FF;
-        padding: 2px 8px;
+        color: #92400E;
+        background-color: #FEF3C7;
+        border: 1px solid #FDE68A;
+        padding: 4px 10px;
         border-radius: 6px;
         display: inline-block;
         width: fit-content;
@@ -247,11 +203,10 @@ if "phone_input" not in st.session_state:
 if "search_triggered" not in st.session_state:
     st.session_state["search_triggered"] = False
 
-# 1. Modern Page Headers
+# 1. Page Headers (H1 & H2)
 st.markdown(
     """
     <div>
-        <div class="hero-badge">Official Remuneration Portal</div>
         <div class="header-h1">Census 2027 Malavalli Rural</div>
         <div class="header-h2">Account Details of Enumerators and Supervisors for Remuneration HLO work</div>
     </div>
@@ -283,7 +238,7 @@ if not df.empty:
         help="Please enter exactly 10 numeric digits.",
     )
 
-    # Search and Clear buttons side by side
+    # Search and Clear buttons side by side (Both styled Red with White Text)
     col1, col2, col3 = st.columns([1.5, 1.5, 4])
     with col1:
         if st.button("Search", type="primary", use_container_width=True):
@@ -313,51 +268,44 @@ if not df.empty:
             if not results.empty:
                 st.success(f"Found {len(results)} matching record(s).")
                 for _, row in results.iterrows():
-                    role = str(row.get("Role", "N/A")).strip()
-                    role_lower = role.lower()
-
-                    # Assign modern badge styles based on Role
-                    if "supervisor" in role_lower:
-                        badge_class = "role-badge role-supervisor"
-                    elif "enumerator" in role_lower:
-                        badge_class = "role-badge role-enumerator"
-                    else:
-                        badge_class = "role-badge role-default"
-
-                    # Render modern result card
+                    # Render result card strictly in the order of the PDF with highlighted fields
                     st.markdown(
                         f"""
                         <div class="result-card">
-                            <div class="result-header-wrapper">
-                                <div class="result-header">👤 {row.get('Name', 'N/A')}</div>
-                                <div class="{badge_class}">{role}</div>
+                            <div class="result-row">
+                                <span class="result-label">Circle Number</span>
+                                <span class="result-value">{row.get('Circle No', 'N/A')}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Name</span>
+                                <span class="result-value">👤 {row.get('Name', 'N/A')}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Role</span>
+                                <span class="result-value">{row.get('Role', 'N/A')}</span>
                             </div>
                             <div class="result-row">
                                 <span class="result-label">Mobile Number</span>
                                 <span class="result-value">{row.get('Mobile Number', row.get('Clean_Mobile', 'N/A'))}</span>
                             </div>
                             <div class="result-row">
-                                <span class="result-label">Circle Number</span>
-                                <span class="result-value">{row.get('Circle No', 'N/A')}</span>
-                            </div>
-                            <div class="result-row">
                                 <span class="result-label">Account Number</span>
-                                <span class="account-code">{row.get('Account No', 'N/A')}</span>
+                                <span class="highlight-box">{row.get('Account No', 'N/A')}</span>
                             </div>
                             <div class="result-row">
                                 <span class="result-label">IFSC Code</span>
-                                <span class="account-code">{row.get('IFSC Code', 'N/A')}</span>
+                                <span class="highlight-box">{row.get('IFSC Code', 'N/A')}</span>
                             </div>
                             <div class="result-row">
                                 <span class="result-label">Bank Name</span>
-                                <span class="result-value">{row.get('Bank Name', 'N/A')}</span>
+                                <span class="highlight-box">{row.get('Bank Name', 'N/A')}</span>
                             </div>
                             <div class="result-row">
                                 <span class="result-label">Branch Name</span>
                                 <span class="result-value">{row.get('Branch Name', 'N/A')}</span>
                             </div>
                             <div class="result-row">
-                                <span class="result-label">School / Office Address</span>
+                                <span class="result-label">Supervisor / Enumerator School / Office Address</span>
                                 <span class="result-value">{row.get('Supervior/Enumerator School/Office Address', 'N/A')}</span>
                             </div>
                         </div>
