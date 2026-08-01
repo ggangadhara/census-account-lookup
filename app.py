@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered",
 )
 
-# Modern UI CSS Styling: Pure White Theme, Red Buttons, Hidden Streamlit Branding & Prominent Credit
+# Modern UI CSS Styling: Pure White Theme, Red Buttons, Hidden Streamlit Branding & Minimalist Attention Credit
 st.markdown(
     """
     <style>
@@ -86,7 +86,7 @@ st.markdown(
         line-height: 1.5;
     }
 
-    /* Stacked Result Card on Pure White (Previous UI Design) */
+    /* Stacked Result Card on Pure White */
     .result-card {
         background: #FFFFFF !important;
         border: 1px solid #E2E8F0;
@@ -141,36 +141,28 @@ st.markdown(
         width: fit-content;
     }
 
-    /* ATTENTION-GRABBING DEVELOPER CREDIT CARD */
-    .credit-card {
-        background: #F8FAFC !important;
-        border: 2px solid #E2E8F0;
-        border-left: 6px solid #DC2626;
-        border-radius: 12px;
-        padding: 20px;
+    /* MINIMALIST YET ATTENTION-GETTING FOOTER CREDIT */
+    .minimal-credit {
         margin-top: 3.5rem;
+        padding: 16px 20px;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
         text-align: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-    }
-    .credit-title {
-        font-size: 0.8rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #DC2626;
-        margin-bottom: 6px;
-    }
-    .credit-name {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #0F172A;
-        margin-bottom: 4px;
-    }
-    .credit-details {
         font-size: 0.95rem;
-        font-weight: 500;
-        color: #475569;
+        color: #334155;
         line-height: 1.6;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+    .credit-highlight {
+        color: #DC2626;
+        font-weight: 700;
+    }
+    .credit-subtext {
+        font-size: 0.85rem;
+        color: #64748B;
+        margin-top: 4px;
+        font-weight: 500;
     }
     </style>
 """,
@@ -348,15 +340,13 @@ if not df.empty:
 else:
     st.info("Waiting for official PDF data to load.")
 
-# 4. Attention-Grabbing Developer Credit Card
+# 4. Minimalist Yet Attention-Getting Developer Credit
 st.markdown(
     """
-    <div class="credit-card">
-        <div class="credit-title">★ Design & Developed By ★</div>
-        <div class="credit-name">Gangadhar</div>
-        <div class="credit-details">
-            Statistical Inspector | Taluk Office, Malavalli<br>
-            <strong>Contact:</strong> 9008737033
+    <div class="minimal-credit">
+        Designed & Developed by <span class="credit-highlight">Gangadhar</span>
+        <div class="credit-subtext">
+            Statistical Inspector, Taluk Office Malavalli &nbsp;•&nbsp; Contact: <strong>9008737033</strong>
         </div>
     </div>
     """,
