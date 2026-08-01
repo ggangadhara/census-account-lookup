@@ -115,7 +115,7 @@ st.markdown(
         align-items: baseline;
         padding: 11px 0;
         border-bottom: 1px solid #F1F5F9;
-        font-size: 1.25rem; /* Significantly increased font size */
+        font-size: 1.25rem;
         line-height: 1.45;
     }
     .detail-row:last-of-type {
@@ -146,15 +146,32 @@ st.markdown(
         display: inline-block;
     }
 
-    /* Correction Note Inside Each Card */
+    /* Interactive WhatsApp Correction Link Inside Card */
     .card-note {
         margin-top: 18px;
         padding-top: 14px;
         border-top: 1px dashed #E2E8F0;
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #DC2626;
         text-align: center;
+        font-size: 0.95rem;
+        color: #475569;
+        font-weight: 500;
+    }
+    .whatsapp-btn {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 8px 18px;
+        background-color: #25D366;
+        color: #FFFFFF !important;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border-radius: 20px;
+        text-decoration: none;
+        box-shadow: 0 2px 6px rgba(37, 211, 102, 0.35);
+        transition: background-color 0.2s ease-in-out;
+    }
+    .whatsapp-btn:hover {
+        background-color: #1EBE5D;
+        text-decoration: none;
     }
 
     /* Smartphone Breakpoint Optimizations (max-width: 480px) */
@@ -170,7 +187,7 @@ st.markdown(
             padding: 18px 14px;
         }
         .detail-row {
-            font-size: 1.08rem; /* Scaled up for mobile readability */
+            font-size: 1.08rem;
             padding: 9px 0;
         }
         .detail-label {
@@ -182,7 +199,7 @@ st.markdown(
         }
     }
 
-    /* Standard Professional Footer Credit */
+    /* Standard Professional Footer Credit (Contact Number Removed) */
     .standard-credit {
         margin-top: 3.5rem;
         padding-top: 1.5rem;
@@ -326,7 +343,10 @@ if not df.empty:
             if not results.empty:
                 st.success(f"Found {len(results)} matching record(s).")
                 for _, row in results.iterrows():
-                    # Larger Font Size, Side-by-Side layout in PDF order with highlighted fields & Card Note
+                    # Prefilled WhatsApp URL for instant correction reporting
+                    wa_url = "https://wa.me/919008737033?text=Hello%20Sir,%20I%20need%20a%20correction%20in%20my%20Census%202027%20account%20details."
+
+                    # Larger Font Size, Side-by-Side layout in PDF order with highlighted fields & WhatsApp Link
                     st.markdown(
                         f"""
                         <div class="result-card">
@@ -367,7 +387,10 @@ if not df.empty:
                                 <span class="detail-value">{row.get('Supervior/Enumerator School/Office Address', 'N/A')}</span>
                             </div>
                             <div class="card-note">
-                                Note : Any corrections kindly WhatsApp 9008737033
+                                <span>Need any correction in your details?</span><br>
+                                <a href="{wa_url}" target="_blank" class="whatsapp-btn">
+                                    💬 WhatsApp for Correction
+                                </a>
                             </div>
                         </div>
                         """,
@@ -380,12 +403,12 @@ if not df.empty:
 else:
     st.info("Waiting for official PDF data to load.")
 
-# 4. Standard Professional Footer Credit
+# 4. Standard Professional Footer Credit (Contact Number Removed)
 st.markdown(
     """
     <div class="standard-credit">
         Designed & Developed by <span class="credit-author">Gangadhar</span><br>
-        <span class="credit-sub">Statistical Inspector, Taluk Office Malavalli &nbsp;|&nbsp; Contact: <strong>9008737033</strong></span>
+        <span class="credit-sub">Statistical Inspector, Taluk Office Malavalli</span>
     </div>
     """,
     unsafe_allow_html=True,
