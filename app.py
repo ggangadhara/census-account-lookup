@@ -10,70 +10,163 @@ st.set_page_config(
     layout="centered",
 )
 
-# Professional CSS styling with larger fonts for search details
+# Modern UI CSS Styling (Inter font, sleek shadows, badges, and clean cards)
 st.markdown(
     """
     <style>
-    /* Main container width and clean font sizing */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    /* Main Container */
     .main {
-        max-width: 720px;
-        padding-top: 1rem;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 740px;
+        padding-top: 1.5rem;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     
-    /* Clean, uniform styling for H1 and H2 */
+    /* Hide Streamlit default top spacing */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+    }
+
+    /* Top Badge */
+    .hero-badge {
+        display: inline-block;
+        background: #EEF2FF;
+        color: #4F46E5;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 20px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        border: 1px solid #E0E7FF;
+    }
+
+    /* H1 & H2 Header Typography */
     .header-h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
         font-weight: 700;
-        color: #1E3A8A;
-        margin-bottom: 0.2rem;
+        color: #0F172A;
+        letter-spacing: -0.5px;
+        margin-bottom: 0.4rem;
         line-height: 1.2;
     }
     .header-h2 {
         font-size: 1.15rem;
         font-weight: 500;
-        color: #4B5563;
-        margin-bottom: 1.5rem;
-        line-height: 1.4;
+        color: #64748B;
+        margin-bottom: 2rem;
+        line-height: 1.5;
+    }
+
+    /* Modern Result Card */
+    .result-card {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 16px;
+        padding: 28px;
+        margin-top: 24px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        position: relative;
+        overflow: hidden;
+    }
+    .result-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #4F46E5, #3B82F6);
     }
     
-    /* Increased font size for result cards and uniform typography */
-    .result-card {
-        background-color: #F9FAFB;
-        border: 1px solid #D1D5DB;
-        border-radius: 10px;
-        padding: 24px;
-        margin-top: 20px;
-        font-size: 1.15rem; /* Increased font size */
-        color: #1F2937;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* Result Card Header & Role Badge */
+    .result-header-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #F1F5F9;
+        padding-bottom: 16px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+        gap: 10px;
     }
     .result-header {
-        font-size: 1.45rem; /* Increased name header size */
+        font-size: 1.5rem;
         font-weight: 700;
-        color: #111827;
-        border-bottom: 2px solid #E5E7EB;
-        padding-bottom: 10px;
-        margin-bottom: 14px;
+        color: #0F172A;
+        margin: 0;
     }
+    .role-badge {
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 20px;
+        text-transform: capitalize;
+    }
+    .role-supervisor {
+        background-color: #EEF2FF;
+        color: #4338CA;
+        border: 1px solid #C7D2FE;
+    }
+    .role-enumerator {
+        background-color: #ECFDF5;
+        color: #047857;
+        border: 1px solid #A7F3D0;
+    }
+    .role-default {
+        background-color: #F1F5F9;
+        color: #475569;
+        border: 1px solid #CBD5E1;
+    }
+
+    /* Rows and Text Layout */
     .result-row {
-        margin-bottom: 10px;
-        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 14px;
+        font-size: 1.15rem;
+        color: #1E293B;
+        line-height: 1.4;
     }
     .result-label {
+        font-size: 0.85rem;
         font-weight: 600;
-        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: #64748B;
+        margin-bottom: 3px;
     }
-    
-    /* Footer credit styling */
+    .result-value {
+        font-weight: 500;
+        color: #0F172A;
+    }
+    .account-code {
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: 700;
+        color: #1E40AF;
+        background: #EFF6FF;
+        padding: 2px 8px;
+        border-radius: 6px;
+        display: inline-block;
+        width: fit-content;
+    }
+
+    /* Modern Footer */
     .footer-credit {
-        margin-top: 3.5rem;
-        padding-top: 1.2rem;
-        border-top: 1px solid #E5E7EB;
+        margin-top: 4rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #E2E8F0;
         text-align: center;
         font-size: 0.9rem;
-        color: #6B7280;
-        line-height: 1.6;
+        color: #64748B;
+        line-height: 1.7;
+    }
+    .footer-name {
+        font-weight: 600;
+        color: #334155;
     }
     </style>
 """,
@@ -135,11 +228,14 @@ if "phone_input" not in st.session_state:
 if "search_triggered" not in st.session_state:
     st.session_state["search_triggered"] = False
 
-# 1. Custom Page Headers (H1 & H2)
+# 1. Modern Page Headers
 st.markdown(
     """
-    <div class="header-h1">Census 2027 Malavalli Rural</div>
-    <div class="header-h2">Account Details of Enumerators and Supervisors for Remuneration HLO work</div>
+    <div>
+        <div class="hero-badge">Official Remuneration Portal</div>
+        <div class="header-h1">Census 2027 Malavalli Rural</div>
+        <div class="header-h2">Account Details of Enumerators and Supervisors for Remuneration HLO work</div>
+    </div>
     """,
     unsafe_allow_html=True,
 )
@@ -159,9 +255,8 @@ else:
     if uploaded_file is not None:
         df = load_and_parse_pdf(uploaded_file)
 
-# 3. Search Bar & Buttons
+# 3. Modern Search Interface
 if not df.empty:
-    # Text input without placeholder background text
     phone_input = st.text_input(
         "Mobile Number",
         max_chars=10,
@@ -199,19 +294,53 @@ if not df.empty:
             if not results.empty:
                 st.success(f"Found {len(results)} matching record(s).")
                 for _, row in results.iterrows():
-                    # Render record with larger font size & included Mobile Number
+                    role = str(row.get("Role", "N/A")).strip()
+                    role_lower = role.lower()
+
+                    # Assign modern badge styles based on Role
+                    if "supervisor" in role_lower:
+                        badge_class = "role-badge role-supervisor"
+                    elif "enumerator" in role_lower:
+                        badge_class = "role-badge role-enumerator"
+                    else:
+                        badge_class = "role-badge role-default"
+
+                    # Render modern result card
                     st.markdown(
                         f"""
                         <div class="result-card">
-                            <div class="result-header">👤 {row.get('Name', 'N/A')}</div>
-                            <div class="result-row"><span class="result-label">Role:</span> {row.get('Role', 'N/A')}</div>
-                            <div class="result-row"><span class="result-label">Mobile Number:</span> {row.get('Mobile Number', row.get('Clean_Mobile', 'N/A'))}</div>
-                            <div class="result-row"><span class="result-label">Circle Number:</span> {row.get('Circle No', 'N/A')}</div>
-                            <div class="result-row"><span class="result-label">Account Number:</span> {row.get('Account No', 'N/A')}</div>
-                            <div class="result-row"><span class="result-label">IFSC Code:</span> {row.get('IFSC Code', 'N/A')}</div>
-                            <div class="result-row"><span class="result-label">Bank Name:</span> {row.get('Bank Name', 'N/A')}</div>
-                            <div class="result-row"><span class="result-label">Branch Name:</span> {row.get('Branch Name', 'N/A')}</div>
-                            <div class="result-row"><span class="result-label">School / Office Address:</span> {row.get('Supervior/Enumerator School/Office Address', 'N/A')}</div>
+                            <div class="result-header-wrapper">
+                                <div class="result-header">👤 {row.get('Name', 'N/A')}</div>
+                                <div class="{badge_class}">{role}</div>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Mobile Number</span>
+                                <span class="result-value">{row.get('Mobile Number', row.get('Clean_Mobile', 'N/A'))}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Circle Number</span>
+                                <span class="result-value">{row.get('Circle No', 'N/A')}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Account Number</span>
+                                <span class="account-code">{row.get('Account No', 'N/A')}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">IFSC Code</span>
+                                <span class="account-code">{row.get('IFSC Code', 'N/A')}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Bank Name</span>
+                                <span class="result-value">{row.get('Bank Name', 'N/A')}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Branch Name</span>
+                                <span class="result-value">{row.get('Branch Name', 'N/A')}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">School / Office Address</span>
+                                <span class="result-value">{row.get('Supervior/Enumerator School/Office Address', 'N/A')}</span>
+                            </div>
                         </div>
                         """,
                         unsafe_allow_html=True,
@@ -227,8 +356,8 @@ else:
 st.markdown(
     """
     <div class="footer-credit">
-        <strong>Design and developed by Gangadhar</strong><br>
-        Statistical Inspector, Taluk Office Malavalli | Contact: 9008737033
+        <span class="footer-name">Design and developed by Gangadhar</span><br>
+        Statistical Inspector, Taluk Office Malavalli | Contact: <strong>9008737033</strong>
     </div>
     """,
     unsafe_allow_html=True,
