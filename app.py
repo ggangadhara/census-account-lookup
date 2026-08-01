@@ -10,11 +10,28 @@ st.set_page_config(
     layout="centered",
 )
 
-# Modern UI CSS Styling (Inter font, sleek shadows, badges, and clean cards)
+# Modern UI CSS Styling with STRICT PURE WHITE BACKGROUND Enforced
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    /* STRICTLY ENFORCE PURE WHITE BACKGROUND GLOBALLY */
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"], .main {
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
+    }
+
+    /* Enforce Dark Text for Streamlit Widgets/Labels in case Dark Mode is default */
+    label[data-testid="stWidgetLabel"] p {
+        color: #0F172A !important;
+        font-weight: 600 !important;
+    }
+    input {
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
+        border: 1px solid #CBD5E1 !important;
+    }
 
     /* Main Container */
     .main {
@@ -27,6 +44,7 @@ st.markdown(
     .block-container {
         padding-top: 2rem;
         padding-bottom: 3rem;
+        background-color: #FFFFFF !important;
     }
 
     /* Top Badge */
@@ -61,14 +79,14 @@ st.markdown(
         line-height: 1.5;
     }
 
-    /* Modern Result Card */
+    /* Modern Result Card on Pure White */
     .result-card {
-        background: #FFFFFF;
+        background: #FFFFFF !important;
         border: 1px solid #E2E8F0;
         border-radius: 16px;
         padding: 28px;
         margin-top: 24px;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
         position: relative;
         overflow: hidden;
     }
@@ -163,6 +181,7 @@ st.markdown(
         font-size: 0.9rem;
         color: #64748B;
         line-height: 1.7;
+        background-color: #FFFFFF !important;
     }
     .footer-name {
         font-weight: 600;
