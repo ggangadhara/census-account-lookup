@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered",
 )
 
-# Modern UI CSS Styling: Pure White Theme, Red Buttons, Hidden Streamlit Branding & Minimalist Attention Credit
+# Modern UI CSS Styling: Pure White Theme, Red Buttons, Hidden Streamlit Branding & Standard Footer Credit
 st.markdown(
     """
     <style>
@@ -141,28 +141,24 @@ st.markdown(
         width: fit-content;
     }
 
-    /* MINIMALIST YET ATTENTION-GETTING FOOTER CREDIT */
-    .minimal-credit {
-        margin-top: 3.5rem;
-        padding: 16px 20px;
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
+    /* STANDARD PROFESSIONAL FOOTER CREDIT */
+    .standard-credit {
+        margin-top: 4rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #E2E8F0;
         text-align: center;
-        font-size: 0.95rem;
-        color: #334155;
-        line-height: 1.6;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        font-size: 0.9rem;
+        color: #475569;
+        line-height: 1.7;
+        background-color: #FFFFFF !important;
     }
-    .credit-highlight {
-        color: #DC2626;
+    .credit-author {
         font-weight: 700;
+        color: #0F172A;
     }
-    .credit-subtext {
+    .credit-sub {
         font-size: 0.85rem;
         color: #64748B;
-        margin-top: 4px;
-        font-weight: 500;
     }
     </style>
 """,
@@ -340,14 +336,12 @@ if not df.empty:
 else:
     st.info("Waiting for official PDF data to load.")
 
-# 4. Minimalist Yet Attention-Getting Developer Credit
+# 4. Standard Professional Footer Credit
 st.markdown(
     """
-    <div class="minimal-credit">
-        Designed & Developed by <span class="credit-highlight">Gangadhar</span>
-        <div class="credit-subtext">
-            Statistical Inspector, Taluk Office Malavalli &nbsp;•&nbsp; Contact: <strong>9008737033</strong>
-        </div>
+    <div class="standard-credit">
+        Designed & Developed by <span class="credit-author">Gangadhar</span><br>
+        <span class="credit-sub">Statistical Inspector, Taluk Office Malavalli &nbsp;|&nbsp; Contact: <strong>9008737033</strong></span>
     </div>
     """,
     unsafe_allow_html=True,
