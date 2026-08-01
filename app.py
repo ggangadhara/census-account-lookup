@@ -5,15 +5,75 @@ import streamlit as st
 
 # Set page configuration
 st.set_page_config(
-    page_title="Census Account Lookup", page_icon="🔍", layout="centered"
+    page_title="Census 2027 Malavalli Rural - Account Lookup",
+    page_icon="🏛️",
+    layout="centered",
 )
 
-# Minimalist custom styling
+# Professional CSS styling for uniform typography, clean cards, and footer
 st.markdown(
     """
     <style>
-    .main { max-width: 700px; padding-top: 1.5rem; }
-    .stTextInput > div > div > input { font-size: 1.1rem; padding: 10px; }
+    /* Main container width and clean font sizing */
+    .main {
+        max-width: 720px;
+        padding-top: 1rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    /* Clean, uniform styling for H1 and H2 */
+    .header-h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1E3A8A;
+        margin-bottom: 0.2rem;
+        line-height: 1.2;
+    }
+    .header-h2 {
+        font-size: 1.15rem;
+        font-weight: 500;
+        color: #4B5563;
+        margin-bottom: 1.5rem;
+        line-height: 1.4;
+    }
+    
+    /* Uniform font styling for result cards */
+    .result-card {
+        background-color: #F9FAFB;
+        border: 1px solid #E5E7EB;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 15px;
+        font-size: 0.95rem;
+        color: #1F2937;
+    }
+    .result-header {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #111827;
+        border-bottom: 1px solid #E5E7EB;
+        padding-bottom: 8px;
+        margin-bottom: 12px;
+    }
+    .result-row {
+        margin-bottom: 8px;
+        line-height: 1.5;
+    }
+    .result-label {
+        font-weight: 600;
+        color: #374151;
+    }
+    
+    /* Footer credit styling */
+    .footer-credit {
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid #E5E7EB;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #6B7280;
+        line-height: 1.6;
+    }
     </style>
 """,
     unsafe_allow_html=True,
@@ -30,22 +90,18 @@ def load_and_parse_pdf(pdf_source):
             tables = page.extract_tables()
             for table in tables:
                 for row in table:
-                    # Clean line breaks and whitespace within cells
                     cleaned_row = [
                         str(cell).replace("\n", " ").strip() if cell else ""
                         for cell in row
                     ]
 
-                    # Identify the table header row
                     if headers is None and "Mobile Number" in cleaned_row:
                         headers = cleaned_row
                         continue
 
-                    # Skip repeated headers on subsequent pages
                     if "Mobile Number" in cleaned_row or "Role" in cleaned_row:
                         continue
 
-                    # Append rows containing valid data
                     if any(cleaned_row):
                         all_rows.append(cleaned_row)
 
@@ -53,15 +109,11 @@ def load_and_parse_pdf(pdf_source):
         return pd.DataFrame()
 
     df = pd.DataFrame(all_rows, columns=headers)
-
-    # Clean up column names
     df.columns = df.columns.str.strip()
 
-    # Forward-fill 'Circle No' across rows where cells were merged or blank
     if "Circle No" in df.columns:
         df["Circle No"] = df["Circle No"].replace("", pd.NA).ffill()
 
-    # Standardize mobile numbers to exactly 10 digits for accurate matching
     if "Mobile Number" in df.columns:
         df["Clean_Mobile"] = (
             df["Mobile Number"].str.replace(r"\D", "", regex=True).str[-10:]
@@ -70,13 +122,16 @@ def load_and_parse_pdf(pdf_source):
     return df
 
 
-# Header
-st.title("🔍 Account Details Lookup")
-st.caption(
-    "Enter a 10-digit phone number to check census bank account details."
+# 1. Custom Page Headers (H1 & H2)
+st.markdown(
+    """
+    <div class="header-h1">Census 2027 Malavalli Rural</div>
+    <div class="header-h2">Account Details of Enumerators and Supervisors for Remuneration HLO work</div>
+    """,
+    unsafe_allow_html=True,
 )
 
-# 1. Load PDF Data (Checks for local repository file first, then fallback uploader)
+# 2. Load PDF Data
 pdf_filename = "Census Bank Details Final.pdf"
 df = pd.DataFrame()
 
@@ -91,43 +146,59 @@ else:
     if uploaded_file is not None:
         df = load_and_parse_pdf(uploaded_file)
 
-# 2. Search Interface
+# 3. Search Bar with Button (Strict 10-Digit Enforcement)
 if not df.empty:
-    phone_input = st.text_input(
-        "Mobile Number",
-        placeholder="e.g., 9845926078",
-        max_chars=15,
-        help="Type the mobile number to search",
-    )
+    with st.form("search_form", clear_on_submit=False):
+        phone_input = st.text_input(
+            "Mobile Number",
+            max_chars=10,
+            placeholder="Enter 10-digit mobile number (e.g., 9845926078)",
+            help="Please enter exactly 10 numeric digits.",
+        )
+        search_clicked = st.form_submit_button("Search", type="primary")
 
-    search_term = (
-        "".join(filter(str.isdigit, phone_input))[-10:] if phone_input else ""
-    )
+    if search_clicked:
+        search_term = "".join(filter(str.isdigit, phone_input))
 
-    if phone_input:
-        if len(search_term) < 10:
-            st.warning("Please enter a valid 10-digit mobile number.")
+        # Enforce exactly 10 digits
+        if len(search_term) != 10:
+            st.warning("⚠️ Please enter exactly 10 digits for the mobile number.")
         else:
             results = df[df["Clean_Mobile"] == search_term]
 
             if not results.empty:
                 st.success(f"Found {len(results)} matching record(s).")
                 for _, row in results.iterrows():
+                    # Render record using uniform custom HTML card styling
                     st.markdown(
                         f"""
-                    ---
-                    ### 👤 {row.get('Name', 'N/A')}
-                    **Role:** {row.get('Role', 'N/A')} | **Circle:** {row.get('Circle No', 'N/A')}
-                    
-                    * **Account Number:** `{row.get('Account No', 'N/A')}`
-                    * **IFSC Code:** `{row.get('IFSC Code', 'N/A')}`
-                    * **Bank Name:** {row.get('Bank Name', 'N/A')}
-                    * **Branch Name:** {row.get('Branch Name', 'N/A')}
-                    * **Office / School Address:** {row.get('Supervior/Enumerator School/Office Address', 'N/A')}
-                    """
+                        <div class="result-card">
+                            <div class="result-header">👤 {row.get('Name', 'N/A')}</div>
+                            <div class="result-row"><span class="result-label">Role:</span> {row.get('Role', 'N/A')}</div>
+                            <div class="result-row"><span class="result-label">Circle Number:</span> {row.get('Circle No', 'N/A')}</div>
+                            <div class="result-row"><span class="result-label">Account Number:</span> {row.get('Account No', 'N/A')}</div>
+                            <div class="result-row"><span class="result-label">IFSC Code:</span> {row.get('IFSC Code', 'N/A')}</div>
+                            <div class="result-row"><span class="result-label">Bank Name:</span> {row.get('Bank Name', 'N/A')}</div>
+                            <div class="result-row"><span class="result-label">Branch Name:</span> {row.get('Branch Name', 'N/A')}</div>
+                            <div class="result-row"><span class="result-label">School / Office Address:</span> {row.get('Supervior/Enumerator School/Office Address', 'N/A')}</div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
                     )
             else:
-                st.error("No account record found for this mobile number.")
+                st.error(
+                    "❌ No account details found for this mobile number. Please check the number and try again."
+                )
 else:
-    st.info("Waiting for PDF data. Please ensure the PDF file is available.")
-  
+    st.info("Waiting for official PDF data to load.")
+
+# 4. Footer Credit
+st.markdown(
+    """
+    <div class="footer-credit">
+        <strong>Design and developed by Gangadhar</strong><br>
+        Statistical Inspector, Taluk Office Malavalli | Contact: 9008737033
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
