@@ -3,14 +3,15 @@ import pandas as pd
 import pdfplumber
 import streamlit as st
 
-# Set page configuration
+# Set page configuration for mobile and desktop viewport
 st.set_page_config(
     page_title="Census 2027 Malavalli Rural - Account Lookup",
     page_icon="🏛️",
     layout="centered",
+    initial_sidebar_state="collapsed",
 )
 
-# Modern UI CSS Styling: Pure White Theme, Red Buttons, Hidden Streamlit Branding & Standard Footer Credit
+# Mobile-Friendly Responsive CSS with STRICT PURE WHITE BACKGROUND & RED BUTTONS
 st.markdown(
     """
     <style>
@@ -45,7 +46,7 @@ st.markdown(
         font-size: 1.05rem !important;
     }
 
-    /* Enforce RED Background and WHITE Text for ALL Buttons (Search & Clear) */
+    /* Enforce RED Background and WHITE Text for ALL Buttons (Touch-Friendly Height) */
     div.stButton > button, div.stButton > button:hover, div.stButton > button:focus, div.stButton > button:active {
         background-color: #DC2626 !important;
         color: #FFFFFF !important;
@@ -57,7 +58,7 @@ st.markdown(
 
     /* Main Container */
     .main {
-        max-width: 740px;
+        max-width: 700px;
         padding-top: 0.5rem;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
@@ -69,31 +70,31 @@ st.markdown(
         background-color: #FFFFFF !important;
     }
 
-    /* H1 & H2 Header Typography */
+    /* Responsive Header Typography */
     .header-h1 {
-        font-size: 2.2rem;
+        font-size: 2rem;
         font-weight: 700;
         color: #0F172A;
         letter-spacing: -0.5px;
-        margin-bottom: 0.4rem;
-        line-height: 1.2;
+        margin-bottom: 0.3rem;
+        line-height: 1.25;
     }
     .header-h2 {
-        font-size: 1.15rem;
+        font-size: 1.05rem;
         font-weight: 500;
-        color: #64748B;
-        margin-bottom: 2rem;
-        line-height: 1.5;
+        color: #475569;
+        margin-bottom: 1.8rem;
+        line-height: 1.45;
     }
 
-    /* Stacked Result Card on Pure White */
+    /* Mobile-Friendly Result Card */
     .result-card {
         background: #FFFFFF !important;
-        border: 1px solid #E2E8F0;
-        border-radius: 16px;
-        padding: 28px;
-        margin-top: 24px;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+        border: 1.5px solid #E2E8F0;
+        border-radius: 14px;
+        padding: 22px 18px;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         position: relative;
         overflow: hidden;
     }
@@ -107,26 +108,31 @@ st.markdown(
         background: #DC2626;
     }
     
-    /* Stacked Rows and Uniform Text Layout */
-    .result-row {
+    /* SIDE-BY-SIDE INLINE LAYOUT (Label : Value) */
+    .detail-row {
         display: flex;
-        flex-direction: column;
-        margin-bottom: 14px;
-        font-size: 1.15rem;
-        color: #1E293B;
-        line-height: 1.5;
+        flex-direction: row;
+        align-items: baseline;
+        padding: 9px 0;
+        border-bottom: 1px solid #F1F5F9;
+        font-size: 1.05rem;
+        line-height: 1.4;
     }
-    .result-label {
-        font-size: 0.85rem;
+    .detail-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    .detail-label {
         font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        color: #64748B;
-        margin-bottom: 3px;
+        color: #4B5563;
+        width: 140px;
+        flex-shrink: 0;
     }
-    .result-value {
+    .detail-value {
         font-weight: 500;
         color: #0F172A;
+        flex-grow: 1;
+        word-break: break-word;
     }
 
     /* Targeted Highlighting for Account Number, IFSC Code, and Bank Name */
@@ -135,15 +141,48 @@ st.markdown(
         color: #92400E;
         background-color: #FEF3C7;
         border: 1px solid #FDE68A;
-        padding: 4px 10px;
+        padding: 3px 8px;
         border-radius: 6px;
         display: inline-block;
-        width: fit-content;
     }
 
-    /* STANDARD PROFESSIONAL FOOTER CREDIT */
+    /* Smartphone Breakpoint Optimizations (max-width: 480px) */
+    @media (max-width: 480px) {
+        .header-h1 {
+            font-size: 1.55rem;
+        }
+        .header-h2 {
+            font-size: 0.95rem;
+            margin-bottom: 1.4rem;
+        }
+        .result-card {
+            padding: 16px 14px;
+        }
+        .detail-row {
+            font-size: 0.95rem;
+            padding: 8px 0;
+        }
+        .detail-label {
+            width: 110px; /* Compact label width on smartphone screens */
+        }
+    }
+
+    /* Correction Alert Note */
+    .correction-note {
+        margin-top: 2.5rem;
+        padding: 12px 16px;
+        background-color: #FEF2F2;
+        border: 1px solid #FECACA;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #991B1B;
+    }
+
+    /* Standard Professional Footer Credit */
     .standard-credit {
-        margin-top: 4rem;
+        margin-top: 1.5rem;
         padding-top: 1.5rem;
         border-top: 1px solid #E2E8F0;
         text-align: center;
@@ -246,7 +285,7 @@ else:
     if uploaded_file is not None:
         df = load_and_parse_pdf(uploaded_file)
 
-# 3. Search Interface
+# 3. Mobile-Friendly Search Interface
 if not df.empty:
     phone_input = st.text_input(
         "Mobile Number",
@@ -256,7 +295,7 @@ if not df.empty:
     )
 
     # Search and Clear buttons side by side (Both styled Red with White Text)
-    col1, col2, col3 = st.columns([1.5, 1.5, 4])
+    col1, col2 = st.columns(2)
     with col1:
         if st.button("Search", type="primary", use_container_width=True):
             st.session_state["search_triggered"] = True
@@ -285,45 +324,45 @@ if not df.empty:
             if not results.empty:
                 st.success(f"Found {len(results)} matching record(s).")
                 for _, row in results.iterrows():
-                    # Stacked Layout strictly in PDF Order with highlights
+                    # Side-by-Side (Label : Value) layout in exact PDF order
                     st.markdown(
                         f"""
                         <div class="result-card">
-                            <div class="result-row">
-                                <span class="result-label">Circle Number</span>
-                                <span class="result-value">{row.get('Circle No', 'N/A')}</span>
+                            <div class="detail-row">
+                                <span class="detail-label">Circle No :</span>
+                                <span class="detail-value">{row.get('Circle No', 'N/A')}</span>
                             </div>
-                            <div class="result-row">
-                                <span class="result-label">Name</span>
-                                <span class="result-value">👤 {row.get('Name', 'N/A')}</span>
+                            <div class="detail-row">
+                                <span class="detail-label">Name :</span>
+                                <span class="detail-value"><strong>{row.get('Name', 'N/A')}</strong></span>
                             </div>
-                            <div class="result-row">
-                                <span class="result-label">Role</span>
-                                <span class="result-value">{row.get('Role', 'N/A')}</span>
+                            <div class="detail-row">
+                                <span class="detail-label">Role :</span>
+                                <span class="detail-value">{row.get('Role', 'N/A')}</span>
                             </div>
-                            <div class="result-row">
-                                <span class="result-label">Mobile Number</span>
-                                <span class="result-value">{row.get('Mobile Number', row.get('Clean_Mobile', 'N/A'))}</span>
+                            <div class="detail-row">
+                                <span class="detail-label">Mobile No :</span>
+                                <span class="detail-value">{row.get('Mobile Number', row.get('Clean_Mobile', 'N/A'))}</span>
                             </div>
-                            <div class="result-row">
-                                <span class="result-label">Account Number</span>
-                                <span class="highlight-box">{row.get('Account No', 'N/A')}</span>
+                            <div class="detail-row">
+                                <span class="detail-label">Account No :</span>
+                                <span class="detail-value"><span class="highlight-box">{row.get('Account No', 'N/A')}</span></span>
                             </div>
-                            <div class="result-row">
-                                <span class="result-label">IFSC Code</span>
-                                <span class="highlight-box">{row.get('IFSC Code', 'N/A')}</span>
+                            <div class="detail-row">
+                                <span class="detail-label">IFSC Code :</span>
+                                <span class="detail-value"><span class="highlight-box">{row.get('IFSC Code', 'N/A')}</span></span>
                             </div>
-                            <div class="result-row">
-                                <span class="result-label">Bank Name</span>
-                                <span class="highlight-box">{row.get('Bank Name', 'N/A')}</span>
+                            <div class="detail-row">
+                                <span class="detail-label">Bank Name :</span>
+                                <span class="detail-value"><span class="highlight-box">{row.get('Bank Name', 'N/A')}</span></span>
                             </div>
-                            <div class="result-row">
-                                <span class="result-label">Branch Name</span>
-                                <span class="result-value">{row.get('Branch Name', 'N/A')}</span>
+                            <div class="detail-row">
+                                <span class="detail-label">Branch Name :</span>
+                                <span class="detail-value">{row.get('Branch Name', 'N/A')}</span>
                             </div>
-                            <div class="result-row">
-                                <span class="result-label">Supervisor / Enumerator School / Office Address</span>
-                                <span class="result-value">{row.get('Supervior/Enumerator School/Office Address', 'N/A')}</span>
+                            <div class="detail-row">
+                                <span class="detail-label">Address :</span>
+                                <span class="detail-value">{row.get('Supervior/Enumerator School/Office Address', 'N/A')}</span>
                             </div>
                         </div>
                         """,
@@ -336,9 +375,12 @@ if not df.empty:
 else:
     st.info("Waiting for official PDF data to load.")
 
-# 4. Standard Professional Footer Credit
+# 4. Correction Note & Standard Professional Footer Credit
 st.markdown(
     """
+    <div class="correction-note">
+        Note : Any corrections kindly WhatsApp 9008737033
+    </div>
     <div class="standard-credit">
         Designed & Developed by <span class="credit-author">Gangadhar</span><br>
         <span class="credit-sub">Statistical Inspector, Taluk Office Malavalli &nbsp;|&nbsp; Contact: <strong>9008737033</strong></span>
