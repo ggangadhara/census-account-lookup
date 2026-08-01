@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered",
 )
 
-# Professional CSS styling for uniform typography, clean cards, and footer
+# Professional CSS styling with larger fonts for search details
 st.markdown(
     """
     <style>
@@ -37,27 +37,28 @@ st.markdown(
         line-height: 1.4;
     }
     
-    /* Uniform font styling for result cards */
+    /* Increased font size for result cards and uniform typography */
     .result-card {
         background-color: #F9FAFB;
-        border: 1px solid #E5E7EB;
-        border-radius: 8px;
-        padding: 20px;
-        margin-top: 15px;
-        font-size: 0.95rem;
+        border: 1px solid #D1D5DB;
+        border-radius: 10px;
+        padding: 24px;
+        margin-top: 20px;
+        font-size: 1.15rem; /* Increased font size */
         color: #1F2937;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     .result-header {
-        font-size: 1.2rem;
-        font-weight: 600;
+        font-size: 1.45rem; /* Increased name header size */
+        font-weight: 700;
         color: #111827;
-        border-bottom: 1px solid #E5E7EB;
-        padding-bottom: 8px;
-        margin-bottom: 12px;
+        border-bottom: 2px solid #E5E7EB;
+        padding-bottom: 10px;
+        margin-bottom: 14px;
     }
     .result-row {
-        margin-bottom: 8px;
-        line-height: 1.5;
+        margin-bottom: 10px;
+        line-height: 1.6;
     }
     .result-label {
         font-weight: 600;
@@ -66,11 +67,11 @@ st.markdown(
     
     /* Footer credit styling */
     .footer-credit {
-        margin-top: 3rem;
-        padding-top: 1rem;
+        margin-top: 3.5rem;
+        padding-top: 1.2rem;
         border-top: 1px solid #E5E7EB;
         text-align: center;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         color: #6B7280;
         line-height: 1.6;
     }
@@ -122,6 +123,18 @@ def load_and_parse_pdf(pdf_source):
     return df
 
 
+# Callback function to clear the search input box
+def clear_input():
+    st.session_state["phone_input"] = ""
+    st.session_state["search_triggered"] = False
+
+
+# Initialize session state variables
+if "phone_input" not in st.session_state:
+    st.session_state["phone_input"] = ""
+if "search_triggered" not in st.session_state:
+    st.session_state["search_triggered"] = False
+
 # 1. Custom Page Headers (H1 & H2)
 st.markdown(
     """
@@ -146,35 +159,53 @@ else:
     if uploaded_file is not None:
         df = load_and_parse_pdf(uploaded_file)
 
-# 3. Search Bar with Button (Strict 10-Digit Enforcement)
+# 3. Search Bar & Buttons
 if not df.empty:
-    with st.form("search_form", clear_on_submit=False):
-        phone_input = st.text_input(
-            "Mobile Number",
-            max_chars=10,
-            placeholder="Enter 10-digit mobile number (e.g., 9845926078)",
-            help="Please enter exactly 10 numeric digits.",
-        )
-        search_clicked = st.form_submit_button("Search", type="primary")
+    # Text input without placeholder background text
+    phone_input = st.text_input(
+        "Mobile Number",
+        max_chars=10,
+        key="phone_input",
+        help="Please enter exactly 10 numeric digits.",
+    )
 
-    if search_clicked:
+    # Search and Clear buttons side by side
+    col1, col2, col3 = st.columns([1.5, 1.5, 4])
+    with col1:
+        if st.button("Search", type="primary", use_container_width=True):
+            st.session_state["search_triggered"] = True
+    with col2:
+        st.button(
+            "Clear",
+            on_click=clear_input,
+            type="secondary",
+            use_container_width=True,
+        )
+
+    # Trigger search on button click or when user presses Enter
+    if st.session_state["search_triggered"] or (
+        phone_input and len(phone_input) == 10
+    ):
         search_term = "".join(filter(str.isdigit, phone_input))
 
         # Enforce exactly 10 digits
         if len(search_term) != 10:
-            st.warning("⚠️ Please enter exactly 10 digits for the mobile number.")
+            st.warning(
+                "⚠️ Please enter exactly 10 digits for the mobile number."
+            )
         else:
             results = df[df["Clean_Mobile"] == search_term]
 
             if not results.empty:
                 st.success(f"Found {len(results)} matching record(s).")
                 for _, row in results.iterrows():
-                    # Render record using uniform custom HTML card styling
+                    # Render record with larger font size & included Mobile Number
                     st.markdown(
                         f"""
                         <div class="result-card">
                             <div class="result-header">👤 {row.get('Name', 'N/A')}</div>
                             <div class="result-row"><span class="result-label">Role:</span> {row.get('Role', 'N/A')}</div>
+                            <div class="result-row"><span class="result-label">Mobile Number:</span> {row.get('Mobile Number', row.get('Clean_Mobile', 'N/A'))}</div>
                             <div class="result-row"><span class="result-label">Circle Number:</span> {row.get('Circle No', 'N/A')}</div>
                             <div class="result-row"><span class="result-label">Account Number:</span> {row.get('Account No', 'N/A')}</div>
                             <div class="result-row"><span class="result-label">IFSC Code:</span> {row.get('IFSC Code', 'N/A')}</div>
