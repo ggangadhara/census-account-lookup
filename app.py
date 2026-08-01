@@ -58,7 +58,7 @@ st.markdown(
 
     /* Main Container */
     .main {
-        max-width: 700px;
+        max-width: 720px;
         padding-top: 0.5rem;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
@@ -92,9 +92,9 @@ st.markdown(
         background: #FFFFFF !important;
         border: 1.5px solid #E2E8F0;
         border-radius: 14px;
-        padding: 22px 18px;
+        padding: 24px 20px;
         margin-top: 20px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
         position: relative;
         overflow: hidden;
     }
@@ -108,25 +108,25 @@ st.markdown(
         background: #DC2626;
     }
     
-    /* SIDE-BY-SIDE INLINE LAYOUT (Label : Value) */
+    /* SIDE-BY-SIDE INLINE LAYOUT WITH INCREASED FONT SIZE (Label : Value) */
     .detail-row {
         display: flex;
         flex-direction: row;
         align-items: baseline;
-        padding: 9px 0;
+        padding: 11px 0;
         border-bottom: 1px solid #F1F5F9;
-        font-size: 1.05rem;
-        line-height: 1.4;
+        font-size: 1.25rem; /* Significantly increased font size */
+        line-height: 1.45;
     }
-    .detail-row:last-child {
+    .detail-row:last-of-type {
         border-bottom: none;
-        padding-bottom: 0;
     }
     .detail-label {
         font-weight: 600;
         color: #4B5563;
-        width: 140px;
+        width: 160px;
         flex-shrink: 0;
+        font-size: 1.15rem;
     }
     .detail-value {
         font-weight: 500;
@@ -135,7 +135,7 @@ st.markdown(
         word-break: break-word;
     }
 
-    /* Targeted Highlighting for Account Number, IFSC Code, and Bank Name */
+    /* Targeted Highlighting for Account No, IFSC Code, Bank Name & Branch Name */
     .highlight-box {
         font-weight: 700;
         color: #92400E;
@@ -144,6 +144,17 @@ st.markdown(
         padding: 3px 8px;
         border-radius: 6px;
         display: inline-block;
+    }
+
+    /* Correction Note Inside Each Card */
+    .card-note {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px dashed #E2E8F0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #DC2626;
+        text-align: center;
     }
 
     /* Smartphone Breakpoint Optimizations (max-width: 480px) */
@@ -156,33 +167,24 @@ st.markdown(
             margin-bottom: 1.4rem;
         }
         .result-card {
-            padding: 16px 14px;
+            padding: 18px 14px;
         }
         .detail-row {
-            font-size: 0.95rem;
-            padding: 8px 0;
+            font-size: 1.08rem; /* Scaled up for mobile readability */
+            padding: 9px 0;
         }
         .detail-label {
-            width: 110px; /* Compact label width on smartphone screens */
+            width: 115px;
+            font-size: 1rem;
         }
-    }
-
-    /* Correction Alert Note */
-    .correction-note {
-        margin-top: 2.5rem;
-        padding: 12px 16px;
-        background-color: #FEF2F2;
-        border: 1px solid #FECACA;
-        border-radius: 8px;
-        text-align: center;
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #991B1B;
+        .card-note {
+            font-size: 0.88rem;
+        }
     }
 
     /* Standard Professional Footer Credit */
     .standard-credit {
-        margin-top: 1.5rem;
+        margin-top: 3.5rem;
         padding-top: 1.5rem;
         border-top: 1px solid #E2E8F0;
         text-align: center;
@@ -324,7 +326,7 @@ if not df.empty:
             if not results.empty:
                 st.success(f"Found {len(results)} matching record(s).")
                 for _, row in results.iterrows():
-                    # Side-by-Side (Label : Value) layout in exact PDF order
+                    # Larger Font Size, Side-by-Side layout in PDF order with highlighted fields & Card Note
                     st.markdown(
                         f"""
                         <div class="result-card">
@@ -358,11 +360,14 @@ if not df.empty:
                             </div>
                             <div class="detail-row">
                                 <span class="detail-label">Branch Name :</span>
-                                <span class="detail-value">{row.get('Branch Name', 'N/A')}</span>
+                                <span class="detail-value"><span class="highlight-box">{row.get('Branch Name', 'N/A')}</span></span>
                             </div>
                             <div class="detail-row">
                                 <span class="detail-label">Address :</span>
                                 <span class="detail-value">{row.get('Supervior/Enumerator School/Office Address', 'N/A')}</span>
+                            </div>
+                            <div class="card-note">
+                                Note : Any corrections kindly WhatsApp 9008737033
                             </div>
                         </div>
                         """,
@@ -375,12 +380,9 @@ if not df.empty:
 else:
     st.info("Waiting for official PDF data to load.")
 
-# 4. Correction Note & Standard Professional Footer Credit
+# 4. Standard Professional Footer Credit
 st.markdown(
     """
-    <div class="correction-note">
-        Note : Any corrections kindly WhatsApp 9008737033
-    </div>
     <div class="standard-credit">
         Designed & Developed by <span class="credit-author">Gangadhar</span><br>
         <span class="credit-sub">Statistical Inspector, Taluk Office Malavalli &nbsp;|&nbsp; Contact: <strong>9008737033</strong></span>
