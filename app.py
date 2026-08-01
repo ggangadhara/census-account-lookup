@@ -11,7 +11,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Mobile-Friendly Responsive CSS with STRICT PURE WHITE BACKGROUND & RED BUTTONS
+# Mobile-Friendly Responsive CSS with FLUID AUTO-SPACING, WHITE BACKGROUND & RED BUTTONS
 st.markdown(
     """
     <style>
@@ -56,17 +56,19 @@ st.markdown(
         min-height: 44px !important;
     }
 
-    /* Main Container */
+    /* Main Container with Auto Fluid Padding */
     .main {
         max-width: 720px;
         padding-top: 0.5rem;
+        padding-left: clamp(0.5rem, 3vw, 1.5rem) !important;
+        padding-right: clamp(0.5rem, 3vw, 1.5rem) !important;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     
-    /* Hide Streamlit default top spacing */
+    /* Hide Streamlit default top spacing & enforce ample bottom spacing */
     .block-container {
-        padding-top: 1rem;
-        padding-bottom: 2.5rem;
+        padding-top: 1rem !important;
+        padding-bottom: 4rem !important;
         background-color: #FFFFFF !important;
     }
 
@@ -87,13 +89,14 @@ st.markdown(
         line-height: 1.45;
     }
 
-    /* Mobile-Friendly Result Card */
+    /* Mobile-Friendly Result Card with Fluid Auto-Padding */
     .result-card {
         background: #FFFFFF !important;
         border: 1.5px solid #E2E8F0;
         border-radius: 14px;
-        padding: 24px 20px;
+        padding: clamp(16px, 4vw, 24px) clamp(14px, 4vw, 20px);
         margin-top: 20px;
+        margin-bottom: 15px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
         position: relative;
         overflow: hidden;
@@ -108,15 +111,16 @@ st.markdown(
         background: #DC2626;
     }
     
-    /* SIDE-BY-SIDE INLINE LAYOUT WITH INCREASED FONT SIZE (Label : Value) */
+    /* SIDE-BY-SIDE INLINE LAYOUT WITH FLUID AUTO-SPACING (Label : Value) */
     .detail-row {
         display: flex;
         flex-direction: row;
         align-items: baseline;
-        padding: 11px 0;
+        padding: clamp(8px, 2vw, 11px) 0;
         border-bottom: 1px solid #F1F5F9;
         font-size: 1.25rem;
         line-height: 1.45;
+        gap: 8px; /* Automatic fluid spacing between label and value */
     }
     .detail-row:last-of-type {
         border-bottom: none;
@@ -124,14 +128,13 @@ st.markdown(
     .detail-label {
         font-weight: 600;
         color: #4B5563;
-        width: 160px;
-        flex-shrink: 0;
+        flex: 0 0 clamp(105px, 34vw, 160px); /* Dynamically scales label width across any mobile viewport */
         font-size: 1.15rem;
     }
     .detail-value {
         font-weight: 500;
         color: #0F172A;
-        flex-grow: 1;
+        flex: 1 1 auto;
         word-break: break-word;
     }
 
@@ -183,15 +186,11 @@ st.markdown(
             font-size: 0.95rem;
             margin-bottom: 1.4rem;
         }
-        .result-card {
-            padding: 18px 14px;
-        }
         .detail-row {
             font-size: 1.08rem;
-            padding: 9px 0;
+            gap: 6px; /* Tightens auto-spacing gracefully on smaller screens */
         }
         .detail-label {
-            width: 115px;
             font-size: 1rem;
         }
         .card-note {
@@ -199,15 +198,17 @@ st.markdown(
         }
     }
 
-    /* Standard Professional Footer Credit (Contact Number Removed) */
+    /* Standard Professional Footer Credit with Generous Spacing */
     .standard-credit {
-        margin-top: 3.5rem;
-        padding-top: 1.5rem;
+        margin-top: 4.5rem !important;
+        margin-bottom: 2.5rem !important;
+        padding-top: 1.8rem;
+        padding-bottom: 1.5rem;
         border-top: 1px solid #E2E8F0;
         text-align: center;
         font-size: 0.9rem;
         color: #475569;
-        line-height: 1.7;
+        line-height: 1.8;
         background-color: #FFFFFF !important;
     }
     .credit-author {
@@ -346,7 +347,7 @@ if not df.empty:
                     # Prefilled WhatsApp URL for instant correction reporting
                     wa_url = "https://wa.me/919008737033?text=Hello%20Sir,%20I%20need%20a%20correction%20in%20my%20Census%202027%20account%20details."
 
-                    # Larger Font Size, Side-by-Side layout in PDF order with highlighted fields & WhatsApp Link
+                    # Fluid Auto-Spacing Side-by-Side Layout in exact PDF order with highlights & WhatsApp Link
                     st.markdown(
                         f"""
                         <div class="result-card">
@@ -403,7 +404,7 @@ if not df.empty:
 else:
     st.info("Waiting for official PDF data to load.")
 
-# 4. Standard Professional Footer Credit (Contact Number Removed)
+# 4. Standard Professional Footer Credit with Balanced Spacing
 st.markdown(
     """
     <div class="standard-credit">
