@@ -46,6 +46,24 @@ st.markdown(
         font-size: 1.05rem !important;
     }
 
+    /* ENFORCE GREY PLACEHOLDER TEXT COLOR AGAINST WHITE BACKGROUND */
+    input::placeholder {
+        color: #64748B !important;
+        opacity: 1 !important;
+    }
+    input::-webkit-input-placeholder {
+        color: #64748B !important;
+        opacity: 1 !important;
+    }
+    input::-moz-placeholder {
+        color: #64748B !important;
+        opacity: 1 !important;
+    }
+    input:-ms-input-placeholder {
+        color: #64748B !important;
+        opacity: 1 !important;
+    }
+
     /* Enforce RED Background and WHITE Text for ALL Buttons (Touch-Friendly Height) */
     div.stButton > button, div.stButton > button:hover, div.stButton > button:focus, div.stButton > button:active {
         background-color: #DC2626 !important;
