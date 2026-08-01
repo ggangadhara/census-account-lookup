@@ -311,6 +311,7 @@ if not df.empty:
         "Mobile Number",
         max_chars=10,
         key="phone_input",
+        placeholder="enter mobile number and click search",
         help="Please enter exactly 10 numeric digits.",
     )
 
